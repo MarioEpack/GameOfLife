@@ -1,2 +1,2 @@
 # GameOfLife 
-# Still in Progress
+# https://en.wikipedia.org/wiki/Conway's_Game_of_Life
