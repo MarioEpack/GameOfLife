@@ -7,7 +7,7 @@ public class LifeMain {
 			@Override
 			public void run() {
 				try {
-					LifeDesigner window = new LifeDesigner(10, 10);
+					LifeGui window = new LifeGui();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
