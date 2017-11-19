@@ -2,19 +2,36 @@ import java.io.IOException;
 
 public class Life {
 
-	private int game_size_x = 10;
-	private int game_size_y = 10;
+	private final int game_size_x = 20;
+	private final int game_size_y = 20;
 	private int[][] board = new int[game_size_x][game_size_y];
 	private int neighbours;
 	private boolean alive;
+	/**
+	 * cell index's variables, so it's possible to access the specific cell in both
+	 * arayy's
+	 */
 	private int ind_x = 0;
 	private int ind_y = 0;
 	private int[][] cell_neighbours; // in this array we keep the number of
 										// neighbours of each cell
 
-	public Life(int size_x, int size_y) {
-		this.game_size_x = size_x;
-		this.game_size_y = size_y;
+	/**
+	 * Getter
+	 * 
+	 * @return the size of the game_x
+	 */
+	public int get_game_size_x() {
+		return game_size_x;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the size of the game_t
+	 */
+	public int get_game_size_y() {
+		return game_size_y;
 	}
 
 	/**
@@ -30,7 +47,7 @@ public class Life {
 	}
 
 	/**
-	 * This is a private methodfor a number of neighbours the specified cell has
+	 * This is a private method for a number of neighbours the specified cell has
 	 * 
 	 * @param index_x
 	 *            place of the cell in the array
@@ -75,16 +92,28 @@ public class Life {
 	}
 
 	/**
+	 * This private void is only used in the method find_neighbours() to simplify
+	 * code
+	 * 
+	 * @param index_x
+	 *            x index in the array this.board[][]
+	 * @param index_y
+	 *            y index in the array this.board[][]
+	 */
+	private void neighbours_check(int index_x, int index_y) {
+		if ((index_x >= 0 && index_x < this.board.length) && (index_y >= 0 && index_y < this.board.length)) {
+			if (this.is_alive(this.board[index_x][index_y]) == true) {
+				this.neighbours += 1;
+			}
+		}
+	}
+
+	/**
 	 * This methods finds how many neighbours each cell or (board[index_y][index_y])
 	 * has, and sets the value into the int[][] cell_neighbours array at the same
 	 * index.
 	 */
-
 	private void find_neighbours() {
-		// in this method, we find out how many alive cells are around our current cell,
-		// ulozim si hodnoty do nemenneho pola, a kazda bunka si checkne hodnoty z toho
-		// stareho nemenneho pola
-
 		for (int index_x = 0; index_x < this.board.length; index_x++) {
 			for (int index_y = 0; index_y < this.board[index_x].length; index_y++) {
 				// variable neighbours always resets back to zero, for the next cell
@@ -92,41 +121,25 @@ public class Life {
 				this.ind_x = index_x;
 				this.ind_y = index_y;
 
-				// tento try bude treba prerobit, hranicne indexy skipuju ostatne if-y.
-				try {
-					// Here we count how many alive cells are around our current cell, so we can
-					// add the number of neighbours into array cell_neighbours
-					if (this.is_alive(this.board[index_x - 1][index_y - 1]) == true) { // Upper Left
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x][index_y - 1]) == true) { // Above
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x + 1][index_y - 1]) == true) { // Upper Right
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x + 1][index_y]) == true) { // Right
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x + 1][index_y + 1]) == true) { // Lower right
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x][index_y + 1]) == true) { // Under
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x - 1][index_y + 1]) == true) { // Lower Left
-						neighbours += 1;
-					}
-					if (this.is_alive(this.board[index_x - 1][index_y]) == true) { // Left
-						neighbours += 1;
-					}
-					cell_neighbours[index_x][index_y] = neighbours;
+				/*
+				 * Here we calculate how many neighbours each cells has for each index arround
+				 */
+				this.neighbours_check(index_x - 1, index_y - 1); // Upper Left
+				this.neighbours_check(index_x, index_y - 1); // Above
+				this.neighbours_check(index_x + 1, index_y - 1); // Upper Right
+				this.neighbours_check(index_x + 1, index_y);// Right
+				this.neighbours_check(index_x + 1, index_y + 1);// Lower right
+				this.neighbours_check(index_x, index_y + 1);// Under
+				this.neighbours_check(index_x - 1, index_y + 1);// Lower Left
+				this.neighbours_check(index_x - 1, index_y); // Left
 
-				} catch (ArrayIndexOutOfBoundsException e) {
-					// just to ignore errors
-				}
+				/*
+				 * And here we save the value into the cell_neighbours[][] array
+				 */
+				this.cell_neighbours[index_x][index_y] = this.neighbours;
 			}
 		}
+
 	}
 
 	/**
@@ -207,7 +220,7 @@ public class Life {
 
 	}
 
-	/**
+	/*
 	 * These two methods will not work with the gui, its only for standart output
 	 * version of the program
 	 */
