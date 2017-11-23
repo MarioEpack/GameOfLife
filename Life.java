@@ -1,5 +1,15 @@
 import java.io.IOException;
 
+/**
+ * This class makes the simulation for the LifeGui class
+ * 
+ * Based on the Conway's Game of Life see at
+ * https://en.wikipedia.org/wiki/Conway's_Game_of_Life
+ * 
+ * @author Mario Alina
+ *
+ */
+
 public class Life {
 
 	private final int game_size_x = 20;
