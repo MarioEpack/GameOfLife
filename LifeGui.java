@@ -11,9 +11,6 @@ import javax.swing.JFrame;
  * This class sets up a graphic interface for simulating class Life JFrame fills
  * up with JButtons, where each JButton is representing one cell
  * 
- * Known bug: If you try to click on the cell after you played some turns, all
- * the dead cells will come alive
- * 
  * @see https://en.wikipedia.org/wiki/Conway's_Game_of_Life
  * @author Mario Alina
  * 
@@ -92,11 +89,18 @@ public class LifeGui implements ActionListener {
 	private void make_sidebar() {
 		this.sidebar = new JFrame("Sidebar");
 		this.start = new JButton("TURN");
+		this.start.setBackground(Color.ORANGE);
 		this.start.addActionListener(this);
+		JButton reset = new JButton("RESET");
+		reset.addActionListener(this);
+		reset.setBackground(Color.ORANGE);
+		GridLayout layout = new GridLayout(2, 0, 0, 0);
 		this.sidebar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.sidebar.getContentPane().setLayout(layout);
 		this.sidebar.setSize(200, 200);
 		this.sidebar.setLocationRelativeTo(this.frame);
 		this.sidebar.add(start);
+		this.sidebar.add(reset);
 		this.sidebar.setAlwaysOnTop(true);
 		this.sidebar.setVisible(true);
 	}
@@ -111,14 +115,12 @@ public class LifeGui implements ActionListener {
 	 * @param index_y
 	 */
 	private void set_cell(int index_x, int index_y) {
+
 		if (this.life.get_cell_info(index_x, index_y) == 1) {
 			System.out.println(this.life.get_cell_info(index_x, index_y));
 			this.cells[index_x][index_y].setBackground(Color.GREEN);
 		} else {
 			this.cells[index_x][index_y].setBackground(Color.BLACK);
-			this.cells[index_x][index_y].setText("dead");
-			this.cell_ids[index_x][index_y] = "dead";
-
 		}
 	}
 
@@ -130,24 +132,38 @@ public class LifeGui implements ActionListener {
 	public void actionPerformed(ActionEvent click) {
 
 		String clicked_cell;
+		int cell_number;
 		clicked_cell = click.getActionCommand();
 
 		if (click.getActionCommand() == "TURN") {
-			try {
 
+			try {
 				for (int i = 0; i < this.life.get_game_size_x(); i++) {
 					for (int j = 0; j < this.life.get_game_size_y(); j++) {
 						this.set_cell(i, j);
+						this.cells[i][j].setText(this.cell_ids[i][j]);
 					}
 				}
 				this.life.turn();
 
-				System.out.println("end of loop");
-
 			} catch (InterruptedException | IOException e) {
 				e.printStackTrace();
 			}
+
+		} else if (click.getActionCommand() == "RESET") {
+
+			cell_number = 0;
+			for (int i = 0; i < this.cells.length; i++) {
+				for (int j = 0; j < this.cells[i].length; j++) {
+					this.cells[i][j].setBackground(Color.BLACK);
+					this.cells[i][j].setText("dead" + cell_number);
+					this.cell_ids[i][j] = "dead" + cell_number;
+					cell_number += 1;
+					this.life.kill_cell(i, j);
+				}
+			}
 		}
+
 		// V tejto loope menim farbu JButnov po kliky na ne / "ozivaju".
 		for (int index_x = 0; index_x < this.cells.length; index_x++) {
 			for (int index_y = 0; index_y < this.cells[index_x].length; index_y++) {
@@ -155,7 +171,7 @@ public class LifeGui implements ActionListener {
 					this.cells[index_x][index_y].setText("alive");
 					this.cells[index_x][index_y].setBackground(Color.GREEN);
 					this.cell_ids[index_x][index_y] = "alive"; // premenujem nazov buttnu v poli nazvov btnov
-					life.make_cell(index_x, index_y); // + musim ozivit bunku v classe life
+					this.life.make_cell(index_x, index_y); // + musim ozivit bunku v classe life
 				}
 			}
 
