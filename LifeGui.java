@@ -36,6 +36,7 @@ public class LifeGui implements ActionListener {
 	 * Creates the application.
 	 */
 	public LifeGui() {
+		this.life.ask_user_for_input();
 		this.grid_size_x = this.life.get_game_size_x();
 		this.grid_size_y = this.life.get_game_size_y();
 		this.initialize();
