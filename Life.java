@@ -1,5 +1,7 @@
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 /**
  * This class makes the simulation for the LifeGui class
  * 
@@ -12,9 +14,9 @@ import java.io.IOException;
 
 public class Life {
 
-	private final int game_size_x = 40;
-	private final int game_size_y = 40;
-	private int[][] board = new int[game_size_x][game_size_y];
+	private int game_size_x;
+	private int game_size_y;
+	private int[][] board;
 	private int neighbours;
 	private boolean alive;
 	/**
@@ -80,6 +82,19 @@ public class Life {
 	 */
 	private void set_cell_life(int index_x, int index_y, int alive_or_dead) {
 		this.board[index_x][index_y] = alive_or_dead;
+	}
+
+	/**
+	 * Asks user for how big the game should be and initializes the array
+	 * this.board[][]
+	 */
+	public void ask_user_for_input() {
+		String game_size_str;
+		game_size_str = JOptionPane.showInputDialog("What size would you like the board to be?");
+		int game_size = Integer.parseInt(game_size_str);
+		this.game_size_x = game_size;
+		this.game_size_y = game_size;
+		this.board = new int[game_size_x][game_size_y];
 	}
 
 	/**
