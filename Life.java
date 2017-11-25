@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class Life {
 
-	private final int game_size_x = 20;
-	private final int game_size_y = 20;
+	private final int game_size_x = 40;
+	private final int game_size_y = 40;
 	private int[][] board = new int[game_size_x][game_size_y];
 	private int neighbours;
 	private boolean alive;
@@ -217,7 +217,6 @@ public class Life {
 
 	public void turn() throws InterruptedException, IOException {
 		// this method you actually call on the object, to pass 1 turn
-		System.out.println("halo" + this.game_size_x);
 		this.loop_and_apply_rules();
 		for (int i = 0; i < this.game_size_x; i++) {
 			for (int j = 0; j < this.game_size_y; j++) {
@@ -225,9 +224,6 @@ public class Life {
 			}
 			System.out.println();
 		}
-
-		// Thread.sleep(1000);
-
 	}
 
 	/*
@@ -247,5 +243,9 @@ public class Life {
 	public void make_cell(int index_x, int index_y) {
 		// This method makes a cell with given index alive
 		this.board[index_x][index_y] = 1;
+	}
+
+	public void kill_cell(int index_x, int index_y) {
+		this.board[index_x][index_y] = 0;
 	}
 }
